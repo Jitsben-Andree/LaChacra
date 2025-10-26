@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Sobre Nosotros - La Granja</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
+    <!-- Sidebar (Desktop) -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 hidden md:flex md:flex-col">
+        <!-- Sidebar Header -->
+        <div class="h-16 flex items-center gap-3 px-4 border-b border-gray-200">
+            <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors" aria-label="Menú">
+                <i class="lni lni-grid-alt text-xl text-gray-700"></i>
+            </button>
+            <a href="/dashboardLog" class="text-lg font-semibold text-gray-800">Menu</a>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3">
+            <ul class="space-y-1">
+                <li>
+                    <a href="/dashboardLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-home text-xl"></i>
+                        <span class="font-medium">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/sobreNosotrosLog" class="flex items-center gap-3 px-3 py-2.5 bg-blue-50 text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-users text-xl"></i>
+                        <span class="font-medium">Nosotros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/productosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-package text-xl"></i>
+                        <span class="font-medium">Productos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/pagos" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-credit-cards text-xl"></i>
+                        <span class="font-medium">Pagos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/contactanosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-envelope text-xl"></i>
+                        <span class="font-medium">Contáctanos</span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="border-t border-gray-200 p-3">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors">
+                <i class="lni lni-exit text-xl"></i>
+                <span class="font-medium">Salir</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"></div>
+
+    <!-- Mobile Sidebar -->
+    <aside id="mobileSidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 transform -translate-x-full transition-transform duration-300 z-50 md:hidden flex flex-col">
+        <!-- Sidebar Header -->
+        <div class="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+            <div class="flex items-center gap-3">
+                <i class="lni lni-grid-alt text-xl text-gray-700"></i>
+                <span class="text-lg font-semibold text-gray-800">Menu</span>
+            </div>
+            <button id="closeMobileSidebar" class="p-2 hover:bg-gray-100 rounded-lg" aria-label="Cerrar menú">
+                <i class="lni lni-close text-xl text-gray-700"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3">
+            <ul class="space-y-1">
+                <li>
+                    <a href="/dashboardLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-home text-xl"></i>
+                        <span class="font-medium">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/sobreNosotrosLog" class="flex items-center gap-3 px-3 py-2.5 bg-blue-50 text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-users text-xl"></i>
+                        <span class="font-medium">Nosotros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/productosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-package text-xl"></i>
+                        <span class="font-medium">Productos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/pagos" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-credit-cards text-xl"></i>
+                        <span class="font-medium">Pagos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/contactanosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-envelope text-xl"></i>
+                        <span class="font-medium">Contáctanos</span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="border-t border-gray-200 p-3">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors">
+                <i class="lni lni-exit text-xl"></i>
+                <span class="font-medium">Salir</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <button id="openMobileSidebar" class="p-2 hover:bg-gray-100 rounded-lg md:hidden">
+                    <i class="lni lni-menu text-xl text-gray-700"></i>
+                </button>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">La Granja</h1>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="hidden sm:inline-block px-3 py-1 bg-green-500 text-white text-sm rounded-full">Sesión Iniciada</span>
+                <a href="/dashboard" class="px-3 md:px-4 py-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg flex items-center gap-2 transition-colors text-sm md:text-base font-medium">
+                    <span class="hidden sm:inline">Cerrar Sesión</span>
+                    <span class="sm:hidden">
+                        <i class="lni lni-exit"></i>
+                    </span>
+                    <i class="lni lni-exit hidden sm:block"></i>
+                </a>
+            </div>
+        </header>
+
+
+        <!-- Page Content -->
+        <main class="flex-1 overflow-y-auto">
+            <div class="container mx-auto px-4 py-8">
+                <!-- Sobre Nosotros -->
+                <section class="max-w-6xl mx-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                        <div class="w-full h-64 sm:h-80 lg:h-full rounded-xl overflow-hidden shadow">
+                            <img src="img/img5.jpg" alt="sobre-nosotros" class="w-full h-full object-cover">
+                        </div>
+                        <div class="bg-white p-6 md:p-8 rounded-2xl shadow">
+                            <h2 class="text-3xl font-extrabold text-gray-900 mb-4">Sobre Nosotros</h2>
+                            <div class="space-y-4 text-gray-700 leading-relaxed">
+                                <p>
+                                    En <span class="font-semibold">Avícola La Chacra</span> nos especializamos en la crianza y producción de
+                                    pollos en granjas industriales, garantizando un proceso controlado y seguro en cada etapa. Tras su crianza,
+                                    los pollos pasan a nuestras máquinas peladoras industriales, donde son cuidadosamente procesados. Las plumas
+                                    resultantes se reutilizan en otra línea de la empresa para la fabricación de suplementos vitamínicos que
+                                    fortalecen y aceleran el crecimiento de nuestras aves, cerrando así un ciclo productivo sostenible.
+                                </p>
+                                <p>
+                                    Además, comercializamos huevos frescos de nuestras propias granjas, y una vez que las aves están listas, se
+                                    destinan a la venta para consumo en el mercado local y regional.
+                                </p>
+                                <p>
+                                    La empresa es dirigida por un grupo de hermanos, quienes desde hace más de 10 años lideran con visión,
+                                    compromiso y dedicación, consolidando a Avícola La Chacra como una de las avícolas de mayor confianza en la
+                                    región. Actualmente contamos con 4 sedes estratégicas:
+                                </p>
+                                <ul class="list-disc pl-6">
+                                    <li>Av. Ferrocarril Nro. 1500 - Huancayo</li>
+                                    <li>Av. Mariscal Cáceres Nro. 535 - Concepción</li>
+                                    <li>Av. Victoria Garma Mercado de Abastos - Huancavelica</li>
+                                    <li>Jr. Tarapacá Nro. 123-125 - Huancayo</li>
+                                </ul>
+                                <p>
+                                    En fechas especiales como Navidad y Año Nuevo, mantenemos alianzas con instituciones de prestigio (colegios
+                                    de médicos, asociaciones de abogados, entre otras), quienes adquieren grandes lotes de pavos, pollos,
+                                    pavipollos y cerdo. Estos productos se entregan mediante vales que los trabajadores canjean directamente en
+                                    nuestras sedes, reforzando así nuestra presencia en la comunidad y nuestra capacidad de atender tanto a
+                                    clientes particulares como a instituciones.
+                                </p>
+                                <p>
+                                    En Avícola La Chacra, trabajamos día a día con el compromiso de ofrecer productos avícolas frescos, nutritivos
+                                    y confiables, respaldados por procesos innovadores, un equipo profesional y la confianza de miles de familias
+                                    y empresas.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Footer -->
+                <footer class="mt-12">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 bg-white p-6 rounded-2xl shadow">
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-gray-900">Contacto</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>📞 989153023 - 989155503</li>
+                                <li>📧 ventas@avicolalachacra.pe</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-gray-900">Sedes</h3>
+                            <ul class="space-y-2 text-gray-700">
+                                <li>📍 Av. Ferrocarril Nro. 1500 - Huancayo</li>
+                                <li>📍 Av. Mariscal Cáceres Nro. 535 - Concepción</li>
+                                <li>📍 Av. Victoria Garma Mercado de Abastos - Huancavelica</li>
+                                <li>📍 Jr. Tarapacá Nro. 123-125 - Huancayo</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-4 text-gray-900">Redes Sociales</h3>
+                            <ul class="space-y-2 text-blue-600">
+                                <li>
+                                    <a href="https://www.facebook.com/profile.php?id=100063451904506" target="_blank" class="hover:underline flex items-center gap-2">
+                                        <i class="lni lni-facebook"></i> Facebook
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="https://www.instagram.com/lachacradistribuidora/" target="_blank" class="hover:underline flex items-center gap-2">
+                                        <i class="lni lni-instagram"></i> Instagram
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </main>
+    </div>
+</div>
+
+<!-- Script: Mobile sidebar toggle -->
+<script>
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const openMobileSidebar = document.getElementById('openMobileSidebar');
+    const closeMobileSidebar = document.getElementById('closeMobileSidebar');
+
+    // Creamos el botón del header si no existiera (por si se usa en otra página)
+    if (!openMobileSidebar) {
+        const header = document.querySelector('header .flex.items-center.gap-3');
+        if (header) {
+            const btn = document.createElement('button');
+            btn.id = 'openMobileSidebar';
+            btn.className = 'p-2 hover:bg-gray-100 rounded-lg md:hidden';
+            btn.innerHTML = '<i class="lni lni-menu text-xl text-gray-700"></i>';
+            header.prepend(btn);
+        }
+    }
+
+    const opener = document.getElementById('openMobileSidebar');
+
+    function openSidebar() {
+        mobileSidebar.classList.remove('-translate-x-full');
+        mobileOverlay.classList.remove('hidden');
+    }
+    function closeSidebar() {
+        mobileSidebar.classList.add('-translate-x-full');
+        mobileOverlay.classList.add('hidden');
+    }
+
+    if (opener) opener.addEventListener('click', openSidebar);
+    if (closeMobileSidebar) closeMobileSidebar.addEventListener('click', closeSidebar);
+    if (mobileOverlay) mobileOverlay.addEventListener('click', closeSidebar);
+</script>
+</body>
+</html>

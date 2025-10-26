@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Granja - Avícola San José</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+</head>
+<body class="bg-gray-50">
+<div class="flex h-screen overflow-hidden">
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r border-gray-200 flex-shrink-0 hidden md:flex md:flex-col">
+        <!-- Sidebar Header -->
+        <div class="h-16 flex items-center gap-3 px-4 border-b border-gray-200">
+            <button class="p-2 hover:bg-gray-100 rounded-lg transition-colors">
+                <i class="lni lni-grid-alt text-xl text-gray-700"></i>
+            </button>
+            <a href="/dashboardLog" class="text-lg font-semibold text-gray-800">Menu</a>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3">
+            <ul class="space-y-1">
+                <li>
+                    <a href="/dashboardLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group">
+                        <i class="lni lni-home text-xl"></i>
+                        <span class="font-medium">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/sobreNosotrosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group">
+                        <i class="lni lni-users text-xl"></i>
+                        <span class="font-medium">Nosotros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/productosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group">
+                        <i class="lni lni-package text-xl"></i>
+                        <span class="font-medium">Productos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/pagos" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group">
+                        <i class="lni lni-credit-cards text-xl"></i>
+                        <span class="font-medium">Pagos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/contactanosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors group">
+                        <i class="lni lni-envelope text-xl"></i>
+                        <span class="font-medium">Contáctanos</span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="border-t border-gray-200 p-3">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors">
+                <i class="lni lni-exit text-xl"></i>
+                <span class="font-medium">Salir</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Mobile Sidebar Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden md:hidden"></div>
+
+    <!-- Mobile Sidebar -->
+    <aside id="mobileSidebar" class="fixed inset-y-0 left-0 w-64 bg-white border-r border-gray-200 transform -translate-x-full transition-transform duration-300 z-50 md:hidden flex flex-col">
+        <!-- Sidebar Header -->
+        <div class="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+            <div class="flex items-center gap-3">
+                <i class="lni lni-grid-alt text-xl text-gray-700"></i>
+                <span class="text-lg font-semibold text-gray-800">Menu</span>
+            </div>
+            <button id="closeMobileSidebar" class="p-2 hover:bg-gray-100 rounded-lg">
+                <i class="lni lni-close text-xl text-gray-700"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3">
+            <ul class="space-y-1">
+                <li>
+                    <a href="/dashboardLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-home text-xl"></i>
+                        <span class="font-medium">Inicio</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/sobreNosotros" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-users text-xl"></i>
+                        <span class="font-medium">Nosotros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/productosLog" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-package text-xl"></i>
+                        <span class="font-medium">Productos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/pagos" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-credit-cards text-xl"></i>
+                        <span class="font-medium">Pagos</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/contactanos" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors">
+                        <i class="lni lni-envelope text-xl"></i>
+                        <span class="font-medium">Contáctanos</span>
+                    </a>
+                </li>
+
+            </ul>
+        </nav>
+
+        <!-- Sidebar Footer -->
+        <div class="border-t border-gray-200 p-3">
+            <a href="#" class="flex items-center gap-3 px-3 py-2.5 text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors">
+                <i class="lni lni-exit text-xl"></i>
+                <span class="font-medium">Salir</span>
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-4 md:px-6 flex-shrink-0">
+            <div class="flex items-center gap-3">
+                <button id="openMobileSidebar" class="p-2 hover:bg-gray-100 rounded-lg md:hidden">
+                    <i class="lni lni-menu text-xl text-gray-700"></i>
+                </button>
+                <h1 class="text-xl md:text-2xl font-bold text-gray-800">La Granja</h1>
+            </div>
+
+            <div class="flex items-center gap-3">
+                <span class="hidden sm:inline-block px-3 py-1 bg-green-500 text-white text-sm rounded-full">Sesión Iniciada</span>
+                <a href="/dashboard" class="px-3 md:px-4 py-2 bg-red-100 hover:bg-red-200 text-red-600 rounded-lg flex items-center gap-2 transition-colors text-sm md:text-base font-medium">
+                    <span class="hidden sm:inline">Cerrar Sesión</span>
+                    <span class="sm:hidden">
+                        <i class="lni lni-exit"></i>
+                    </span>
+                    <i class="lni lni-exit hidden sm:block"></i>
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="flex-1 overflow-y-auto">
+            <div class="container mx-auto px-4 py-8 lg:py-12">
+                <!-- Hero Section -->
+                <div class="text-center mb-12 lg:mb-16">
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 md:mb-6">
+                        Bienvenido a Avícola San José
+                    </h2>
+                    <p class="text-lg md:text-xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
+                        Somos una empresa familiar dedicada a la crianza y venta de pollos y gallinas de
+                        excelente calidad. Con más de 15 años de experiencia en el sector avícola, ofrecemos
+                        aves sanas, bien alimentadas y listas para producción o consumo.
+                    </p>
+                    <p class="text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                        Nuestra pasión por la avicultura y el compromiso con la calidad nos han convertido en
+                        referentes en la región. Trabajamos con dedicación para brindar productos frescos y
+                        saludables directamente desde nuestra granja.
+                    </p>
+                </div>
+
+                <!-- Products Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 mb-12 lg:mb-16">
+                    <!-- Pollos de Engorde -->
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden">
+                        <div class="relative h-56 md:h-64 overflow-hidden">
+                            <img src="img/img2.jpg" alt="Pollos de engorde" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-5 md:p-6">
+                            <h4 class="text-xl md:text-2xl font-bold text-blue-600 mb-3">Pollos de Engorde</h4>
+                            <p class="text-gray-600 mb-4 leading-relaxed">
+                                Ofrecemos pollos de engorde de la mejor calidad, criados con alimentos naturales
+                                y en espacios amplios. Perfectos para consumo familiar o comercial, con peso
+                                promedio de 2.5 a 3.5 kg.
+                            </p>
+                            <ul class="space-y-2">
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Alimentación natural
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Sin hormonas artificiales
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Crianza libre
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Gallinas Ponedoras -->
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden">
+                        <div class="relative h-56 md:h-64 overflow-hidden">
+                            <img src="img/vitaminas.jpg" alt="Gallinas ponedoras" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-5 md:p-6">
+                            <h4 class="text-xl md:text-2xl font-bold text-blue-600 mb-3">Gallinas Ponedoras</h4>
+                            <p class="text-gray-600 mb-4 leading-relaxed">
+                                Gallinas ponedoras de alta producción, ideales para la producción de huevos
+                                frescos. Razas seleccionadas por su resistencia y capacidad de postura constante
+                                durante todo el año.
+                            </p>
+                            <ul class="space-y-2">
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Alta producción de huevos
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Excelente salud y vigor
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Adaptadas al clima local
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Pollitos BB -->
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden">
+                        <div class="relative h-56 md:h-64 overflow-hidden">
+                            <img src="img/pollos.jpg" alt="Pollitos BB" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-5 md:p-6">
+                            <h4 class="text-xl md:text-2xl font-bold text-blue-600 mb-3">Pollitos BB</h4>
+                            <p class="text-gray-600 mb-4 leading-relaxed">
+                                Pollitos de un día de edad, vacunados y listos para crianza. Ofrecemos
+                                diferentes razas según tus necesidades: ponedoras, parrilleros y razas criollas
+                                resistentes.
+                            </p>
+                            <ul class="space-y-2">
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Vacunados y desparasitados
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Múltiples razas disponibles
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Asesoría técnica incluida
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Huevos Frescos -->
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-xl transition-shadow overflow-hidden">
+                        <div class="relative h-56 md:h-64 overflow-hidden">
+                            <img src="img/huevos.jpeg" alt="Huevos frescos" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                        </div>
+                        <div class="p-5 md:p-6">
+                            <h4 class="text-xl md:text-2xl font-bold text-blue-600 mb-3">Huevos Frescos</h4>
+                            <p class="text-gray-600 mb-4 leading-relaxed">
+                                Huevos frescos recolectados diariamente de nuestras gallinas criadas en
+                                libertad. Ricos en nutrientes y con ese sabor auténtico que solo los huevos de
+                                granja pueden ofrecer.
+                            </p>
+                            <ul class="space-y-2">
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Recolección diaria
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Gallinas en libertad
+                                </li>
+                                <li class="flex items-center text-gray-700">
+                                    <svg class="w-5 h-5 text-green-500 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Alto valor nutricional
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Commitment Section -->
+                <div class="bg-gradient-to-br from-gray-50 to-blue-50 rounded-2xl shadow-lg p-6 md:p-10 lg:p-12">
+                    <h3 class="text-2xl md:text-3xl font-bold text-blue-600 text-center mb-8 md:mb-12">Nuestro Compromiso</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                        <div class="text-center p-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 rounded-full mb-4">
+                                <svg class="w-8 h-8 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h5 class="text-lg md:text-xl font-bold text-gray-800 mb-2">Bienestar Animal</h5>
+                            <p class="text-gray-600">
+                                Cuidamos el bienestar de nuestras aves con espacios amplios
+                                y alimentación natural.
+                            </p>
+                        </div>
+
+                        <div class="text-center p-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-green-100 rounded-full mb-4">
+                                <svg class="w-8 h-8 text-green-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M2.166 4.999A11.954 11.954 0 0010 1.944 11.954 11.954 0 0017.834 5c.11.65.166 1.32.166 2.001 0 5.225-3.34 9.67-8 11.317C5.34 16.67 2 12.225 2 7c0-.682.057-1.35.166-2.001zm11.541 3.708a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                            <h5 class="text-lg md:text-xl font-bold text-gray-800 mb-2">Calidad Garantizada</h5>
+                            <p class="text-gray-600">
+                                Productos de la más alta calidad, con controles sanitarios
+                                rigurosos.
+                            </p>
+                        </div>
+
+                        <div class="text-center p-4">
+                            <div class="inline-flex items-center justify-center w-16 h-16 bg-blue-100 rounded-full mb-4">
+                                <svg class="w-8 h-8 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"></path>
+                                    <path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"></path>
+                                </svg>
+                            </div>
+                            <h5 class="text-lg md:text-xl font-bold text-gray-800 mb-2">Entrega Rápida</h5>
+                            <p class="text-gray-600">
+                                Servicio de entrega eficiente para mantener la frescura de
+                                nuestros productos.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    // Mobile sidebar toggle
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const mobileOverlay = document.getElementById('mobileOverlay');
+    const openMobileSidebar = document.getElementById('openMobileSidebar');
+    const closeMobileSidebar = document.getElementById('closeMobileSidebar');
+
+    openMobileSidebar.addEventListener('click', () => {
+        mobileSidebar.classList.remove('-translate-x-full');
+        mobileOverlay.classList.remove('hidden');
+    });
+
+    closeMobileSidebar.addEventListener('click', () => {
+        mobileSidebar.classList.add('-translate-x-full');
+        mobileOverlay.classList.add('hidden');
+    });
+
+    mobileOverlay.addEventListener('click', () => {
+        mobileSidebar.classList.add('-translate-x-full');
+        mobileOverlay.classList.add('hidden');
+    });
+</script>
+</body>
+</html>
