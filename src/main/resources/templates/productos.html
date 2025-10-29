@@ -261,27 +261,30 @@
     if (closeMobileSidebar) closeMobileSidebar.addEventListener('click', closeSidebarFn);
     if (mobileOverlay) mobileOverlay.addEventListener('click', closeSidebarFn);
 
-    // Products functionality
+    // Products functionality (load from backend via REST). The client keeps only quantities in localStorage.
     const PURCHASED_LABEL = 'Adquirido';
-    const IMG = (seed) => `https://picsum.photos/seed/${encodeURIComponent(seed)}/600/400`;
-    const PRODUCTS = [
-        { id:'HUEVOS_DOC', cat:'Huevos',   name:'Huevos rojos | Docena',  desc:'Frescura garantizada', price:16.00, img:IMG('eggs-1') },
-        { id:'HUEVOS_ORG', cat:'Huevos',   name:'Huevos orgánicos | Docena', desc:'Libre de jaula', price:24.00, img:IMG('eggs-2') },
-        { id:'POLLO_KG',   cat:'Pollo',    name:'Pollo entero | Kg',      desc:'Refrigerado • 1.8–2.2 kg', price:36.00, img:IMG('chicken-raw-1') },
-        { id:'PECHUGA_KG', cat:'Pollo',    name:'Pechuga | Kg',           desc:'Sin piel', price:28.00, img:IMG('chicken-breast') },
-        { id:'PAVO_NAV',   cat:'Pavo',     name:'Pavo navideño | 4–5 kg', desc:'Por temporada', price:120.00,img:IMG('turkey-meat') },
-        { id:'PAVO_REB',   cat:'Pavo',     name:'Pavo rebanado | Kg',     desc:'Listo para hornear', price:48.00, img:IMG('turkey-slices') },
-        { id:'CERDO_KG',   cat:'Cerdo',    name:'Pierna y muslo de cerdo | Kg', desc:'Empacado', price:22.00, img:IMG('pork-1') },
-        { id:'ALIM_20KG',  cat:'Alimento', name:'Alimento ponedoras | 20 kg', desc:'Balanceado', price:95.00, img:IMG('chicken-feed') },
-        { id:'VITA_SUP',   cat:'Vitaminas',name:'Vitaminas para pollos | Frasco', desc:'Suplemento multivitamínico', price:24.00, img:IMG('vitamins-bottle') },
-    ];
-    const PEN = v => `S/ ${v.toFixed(2)}`;
+    const PEN = v => `S/ ${Number(v).toFixed(2)}`;
 
+    let PRODUCTS = [];
+    // cart mapping: { '<id>': qty }
     let cart = {};
     let activeCategory = 'all';
 
     const productsGrid = document.getElementById('productsGrid');
     const productCardTpl = document.getElementById('productCardTpl');
+    const cartItems = document.getElementById('cartItems');
+    const cartRowTpl = document.getElementById('cartRowTpl');
+
+    // --- localStorage helpers ---
+    function loadCartFromStorage(){
+        try{
+            const raw = localStorage.getItem('cartQty');
+            cart = raw ? JSON.parse(raw) : {};
+        }catch(e){ cart = {}; }
+    }
+    function saveCartToStorage(){
+        localStorage.setItem('cartQty', JSON.stringify(cart));
+    }
 
     function setAddButtonVisual(btn, inCart){
         if(inCart){
@@ -298,72 +301,108 @@
     }
     function updateButtonsVisible(){
         document.querySelectorAll('[data-product-id]').forEach(card=>{
-            const id = card.dataset.productId;
+            const id = String(card.dataset.productId);
             const btn = card.querySelector('.add');
             if(!btn) return;
-            setAddButtonVisual(btn, Boolean(cart[id]?.qty));
+            setAddButtonVisual(btn, Boolean(cart[id] && cart[id] > 0));
         });
     }
+
     function renderProducts(){
         productsGrid.innerHTML='';
         const q = document.getElementById('searchInput').value.trim().toLowerCase();
         const data = PRODUCTS.filter(p =>
             (activeCategory==='all' || p.cat===activeCategory) &&
-            (p.name.toLowerCase().includes(q) || p.desc.toLowerCase().includes(q))
+            (p.name.toLowerCase().includes(q) || (p.desc && p.desc.toLowerCase().includes(q)))
         );
         data.forEach(p=>{
             const frag = productCardTpl.content.cloneNode(true);
             const article = frag.querySelector('article');
             article.dataset.productId = p.id;
-            frag.querySelector('img').src = p.img;
+            frag.querySelector('img').src = p.imageUrl || p.img || '';
             frag.querySelector('h3').textContent = p.name;
-            frag.querySelector('p').textContent = p.desc;
+            frag.querySelector('p').textContent = p.desc || '';
             frag.querySelector('.text-lg').textContent = PEN(p.price);
             const addBtn = frag.querySelector('.add');
-            addBtn.onclick = () => { addToCart(p, 1); setAddButtonVisual(addBtn, true); };
+            addBtn.onclick = () => { addToCart(String(p.id), 1); setAddButtonVisual(addBtn, true); };
             productsGrid.appendChild(frag);
         });
         updateButtonsVisible();
     }
 
-    const cartItems = document.getElementById('cartItems');
-    const cartRowTpl = document.getElementById('cartRowTpl');
-    function addToCart(product, qty=1){
-        if(!cart[product.id]) cart[product.id] = { ...product, qty:0 };
-        cart[product.id].qty += qty;
+    // --- cart logic that stores only quantities ---
+    function addToCart(productId, qty=1){
+        productId = String(productId);
+        if(!cart[productId]) cart[productId] = 0;
+        cart[productId] += qty;
+        if(cart[productId] <= 0) delete cart[productId];
+        saveCartToStorage();
         renderCart();
+        updateButtonsVisible();
     }
     function changeQty(id, delta){
+        id = String(id);
         if(!cart[id]) return;
-        cart[id].qty += delta;
-        if(cart[id].qty<=0) delete cart[id];
+        cart[id] += delta;
+        if(cart[id] <= 0) delete cart[id];
+        saveCartToStorage();
         renderCart();
+        updateButtonsVisible();
     }
-    function removeItem(id){ delete cart[id]; renderCart(); }
+    function removeItem(id){ id = String(id); delete cart[id]; saveCartToStorage(); renderCart(); updateButtonsVisible(); }
+
     function renderCart(){
         cartItems.innerHTML='';
-        const items = Object.values(cart);
-        if(items.length===0){
+        const ids = Object.keys(cart);
+        if(ids.length===0){
             cartItems.innerHTML = '<p class="text-sm text-gray-600">Tu carrito está vacío.</p>';
         }else{
-            items.forEach(it=>{
+            ids.forEach(id=>{
+                const prod = PRODUCTS.find(p => String(p.id) === String(id));
+                const qty = cart[id];
+                if(!prod) return; // product metadata missing
                 const node = cartRowTpl.content.cloneNode(true);
-                node.querySelector('img').src = it.img;
-                node.querySelector('p').textContent = it.name;
-                node.querySelector('.cart-qty').textContent = it.qty;
-                node.querySelector('[data-role="price"]').textContent = PEN(it.qty*it.price);
-                node.querySelector('.cart-inc').onclick = () => changeQty(it.id,+1);
-                node.querySelector('.cart-dec').onclick = () => changeQty(it.id,-1);
-                node.querySelector('.cart-del').onclick = () => removeItem(it.id);
+                node.querySelector('img').src = prod.imageUrl || prod.img || '';
+                node.querySelector('p').textContent = prod.name;
+                node.querySelector('.cart-qty').textContent = qty;
+                node.querySelector('[data-role="price"]').textContent = PEN(qty * Number(prod.price));
+                node.querySelector('.cart-inc').onclick = () => changeQty(id,+1);
+                node.querySelector('.cart-dec').onclick = () => changeQty(id,-1);
+                node.querySelector('.cart-del').onclick = () => removeItem(id);
                 cartItems.appendChild(node);
             });
         }
-        const subtotal = items.reduce((s, it)=> s + it.qty*it.price, 0);
+        const subtotal = Object.keys(cart).reduce((s,id)=>{
+            const p = PRODUCTS.find(pp=>String(pp.id)===String(id));
+            return s + (p ? Number(p.price) * cart[id] : 0);
+        },0);
         document.getElementById('subtotal').textContent = PEN(subtotal);
-        const shipping = subtotal > 120 ? 0 : (items.length? 8: 0);
+        const shipping = subtotal > 120 ? 0 : (Object.keys(cart).length? 8: 0);
         document.getElementById('shipping').textContent = PEN(shipping);
         document.getElementById('total').textContent = PEN(subtotal + shipping);
-        updateButtonsVisible();
+    }
+
+    // --- fetch products from backend ---
+    async function loadProducts(){
+        try{
+            const res = await fetch('/api/products');
+            if(!res.ok) throw new Error('Error fetching products');
+            const data = await res.json();
+            // adapt server model shape to client expected properties
+            PRODUCTS = data.map(d => ({
+                id: d.id,
+                name: d.name,
+                price: d.price,
+                imageUrl: d.imageUrl,
+                cat: d.cat || 'General',
+                desc: d.desc || ''
+            }));
+            renderProducts();
+            renderCart();
+        }catch(err){
+            console.error('Could not load products', err);
+            productsGrid.innerHTML = '<p class="text-sm text-red-600">No se pudieron cargar los productos.</p>';
+        }
     }
 
     document.querySelectorAll('.filter-btn').forEach(btn=>{
@@ -380,7 +419,7 @@
         document.getElementById('searchInput').value=''; renderProducts();
     });
     document.getElementById('clearCart').addEventListener('click', ()=>{
-        cart = {}; renderCart();
+        cart = {}; saveCartToStorage(); renderCart();
     });
 
 
@@ -389,11 +428,16 @@
             alert('Tu carrito está vacío.');
             return;
         }
-
+        // Guardamos cantidades en localStorage para que la página de pago las recupere
+        saveCartToStorage();
+        // Si el usuario no está autenticado, vuestra app puede redirigir a login antes de /pagos.
+        // Aquí respetamos el comportamiento previo (redirigir a /login) pero puedes cambiar a '/pagos' si quieres.
         window.location.href = '/login';
     });
 
-    renderProducts(); renderCart();
+    // Inicialización: cargar carrito local y datos desde backend
+    loadCartFromStorage();
+    loadProducts();
 </script>
 </body>
 </html>

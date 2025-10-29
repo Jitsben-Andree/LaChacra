@@ -272,39 +272,34 @@
         return `S/ ${parseFloat(price).toFixed(2)}`;
     }
 
-    // Cargar el carrito desde sessionStorage
-    function loadCart() {
+    // Cargar las cantidades desde localStorage (solo mapping id->qty)
+    function loadQuantities() {
         try {
-            return JSON.parse(sessionStorage.getItem('cart') || '{}');
+            return JSON.parse(localStorage.getItem('cartQty') || '{}');
         } catch (e) {
-            console.error('Error al cargar el carrito:', e);
+            console.error('Error al cargar las cantidades del carrito:', e);
             return {};
         }
     }
 
-    // Calcular totales
-    function calculateTotals(cart) {
-        const items = Object.values(cart);
-        const subtotal = items.reduce((sum, item) => sum + (item.qty * item.price), 0);
+    // Calcular totales a partir de items [{name, price, qty}]
+    function calculateTotalsFromItems(items) {
+        const subtotal = items.reduce((sum, item) => sum + (item.qty * Number(item.price)), 0);
         const shipping = subtotal > 120 ? 0 : (items.length > 0 ? 8 : 0);
         const total = subtotal + shipping;
-
-        return { subtotal, shipping, total, items };
+        return { subtotal, shipping, total };
     }
 
-    // Renderizar resumen del carrito
-    function renderCartSummary() {
-        const cart = loadCart();
-        const { subtotal, shipping, total, items } = calculateTotals(cart);
-
+    // Renderizar resumen del carrito: obtiene cantidades de localStorage y metadatos desde /api/products
+    async function renderCartSummary() {
+        const quantities = loadQuantities();
+        const ids = Object.keys(quantities);
         const summaryContainer = document.getElementById('cart-summary');
         const totalElement = document.getElementById('summary-total');
         const montoInput = document.getElementById('monto');
 
-        // Limpiar contenedor
         summaryContainer.innerHTML = '';
-
-        if (items.length === 0) {
+        if (ids.length === 0) {
             summaryContainer.innerHTML = `
                 <div class="text-gray-500 text-center py-4">
                     <p>No hay productos en el carrito</p>
@@ -314,6 +309,27 @@
             if (montoInput) montoInput.value = '0.00';
             return;
         }
+
+        // Cargamos todos los productos y los filtramos (más simple que pedir uno por uno)
+        let products = [];
+        try{
+            const res = await fetch('/api/products');
+            if(!res.ok) throw new Error('Error fetching products');
+            products = await res.json();
+        }catch(e){
+            console.error('No se pudo cargar productos para el resumen', e);
+            summaryContainer.innerHTML = '<p class="text-sm text-red-600">No se pudo cargar la información de productos.</p>';
+            return;
+        }
+
+        // Construimos items con metadata
+        const items = ids.map(id => {
+            const p = products.find(pp => String(pp.id) === String(id));
+            const qty = quantities[id];
+            return p ? { id: p.id, name: p.name, price: p.price, qty } : null;
+        }).filter(Boolean);
+
+        const { subtotal, shipping, total } = calculateTotalsFromItems(items);
 
         // Renderizar cada producto
         items.forEach(item => {
@@ -325,7 +341,7 @@
                     <p class="text-sm text-gray-500">Cantidad: ${item.qty} × ${formatPrice(item.price)}</p>
                 </div>
                 <div class="font-semibold">
-                    ${formatPrice(item.qty * item.price)}
+                    ${formatPrice(item.qty * Number(item.price))}
                 </div>
             `;
             summaryContainer.appendChild(itemElement);
